@@ -27,6 +27,12 @@ import torch
 from torch.nn.parallel import DistributedDataParallel as DDP
 from torch.distributed import init_process_group, destroy_process_group
 
+# NVIDIA graphics card (P620) isn't supported by the Torch triton GPU compiler
+# (P620 is version 6.1, compiler only supports >=7.0)
+# Force it to do "best effort"
+import torch._dynamo
+torch._dynamo.config.suppress_errors = True
+
 from model import GPTConfig, GPT
 
 # -----------------------------------------------------------------------------
